@@ -35,6 +35,5 @@ typedef struct s_gen
 
 int is_dig_arr(char **s);
 int ft_atoi(char *s);
-void    init_gen(t_gen *gen, char **argv);
 
 #endif
