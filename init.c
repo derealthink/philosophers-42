@@ -1,47 +1,49 @@
 
 #include "philo.h"
 
-void    init_gen(t_gen *gen, char **argv)
+void    init_philo(char **argv)
 {
+    int nb;
+
+    t_philo *philo;
     if (!is_dig_arr(argv))
         {
-            printf("parse error");
+            printf("parse error\n");
             return ;
         }
-    gen->nb_philo = ft_atoi(argv[1]);
-    if (gen->nb_philo <= 0)
+    nb = ft_atoi(argv[1]);
+    if (nb <= 0)
     {
-        printf("parse error");
+        printf("insufficient n  of philosophers\n");
         return ;
     }
-    gen->time_die = ft_atoi(argv[2]);
-    gen->time_eat = ft_atoi(argv[3]);
-    gen->time_sleep = ft_atoi(argv[4]);
-    if (argv[5])
-        gen->nb_eat = ft_atoi(argv[5]);
-    else
-        gen->nb_eat = -1;
-    init_forks(gen);
+    init_loop_philo(philo, argv, nb);
 }
-
-void    init_forks(t_gen *gen)
+t_philo    *init_loop_philo(t_philo *tmp, char **argv, int nb)
 {
     int i;
 
     i = 0;
-    if (gen->nb_philo)
+    tmp = malloc(sizeof(t_philo) * nb);
+    while (i < nb)
     {
-        gen->forks = malloc(sizeof(pthread_mutex_t) * gen->nb_philo);
-        while (i < gen->nb_philo)
-        {
-            pthread_mutex_init(&gen->forks[i], NULL);  //study
-            i++;
-        }
+        tmp[i].id = i;
+        tmp[i].nb_philo = nb;
+        tmp[i].time_die = ft_atoi(argv[2]);
+        tmp[i].time_eat = ft_atoi(argv[3]);
+        tmp[i].time_sleep = ft_atoi(argv[4]);
+        if (argv[5])
+            tmp[i].nb_eat = ft_atoi(argv[5]);
+        else
+            tmp[i].nb_eat = -1;
+        tmp[i].eaten = 0;
+        tmp[i].dead = 0;
+        pthread_mutex_init(&print_lock, NULL);
+        pthread_mutex_init(&dead_lock, NULL);
+        pthread_mutex_init(&meal_lock, NULL);
+        pthread_mutex_init(&r_fork, NULL);
+        pthread_mutex_init(&l_fork, NULL);
+        i++;
     }
-}
-
-void    init_philo(t_gen *gen, t_philo *philo)
-{
-    
-
+    return (tmp);
 }
