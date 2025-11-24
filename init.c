@@ -21,10 +21,10 @@ void    init_gen(t_gen *gen, char **argv)
         gen->nb_eat = ft_atoi(argv[5]);
     else
         gen->nb_eat = -1;
-    gen_forks(gen);
+    init_forks(gen);
 }
 
-void    gen_forks(t_gen *gen)
+void    init_forks(t_gen *gen)
 {
     int i;
 
@@ -40,4 +40,8 @@ void    gen_forks(t_gen *gen)
     }
 }
 
+void    init_philo(t_gen *gen, t_philo *philo)
+{
+    
 
+}
