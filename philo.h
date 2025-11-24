@@ -29,6 +29,7 @@ typedef struct s_gen
   pthread_mutex_t *dead_lock;
   pthread_mutex_t *meal_lock;
   pthread_mutex_t *print_lock;
+  pthread_mutex_t *forks;
   int              dead_flag;
   t_philo     *philo;
 }  t_gen;
