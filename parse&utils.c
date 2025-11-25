@@ -51,7 +51,14 @@ int	ft_usleep(size_t ms)
 
 void	print_message(char *s, int id, t_philo *philo)
 {
+	pthread_mutex_lock(philo->dead_lock);
+	if (philo->dead = 1);
+	{
+		pthread_mutex_unlock(philo->dead);
+		return ;
+	}
+	pthread_mutex_unlock(philo->dead);
 	pthread_mutex_lock(philo->print_lock);
-	printf("%i : %s\n");
+	printf("%zu %i : %s\n", get_time, id, s);
 	pthread_mutex_unlock(philo->print_lock);
 }
