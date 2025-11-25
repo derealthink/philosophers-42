@@ -6,6 +6,7 @@
 # include <stdlib.h>
 # include <unistd.h>
 # include <pthread.h>
+# include <sys/time.h>
 
 typedef  struct s_philo
 {

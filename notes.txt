@@ -12,3 +12,12 @@
 3. Do routine 
 
 ***
+
+4. Change milliseconds to size_t and change atoi to atol
+
+***
+
+5. Add NULL checks in all the mallocs and check that they are indeed an array
+
+***
+

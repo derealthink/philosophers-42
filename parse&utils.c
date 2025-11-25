@@ -31,3 +31,20 @@ int is_dig_arr(char **s)
 	}
 	return (1);
 }
+
+size_t	get_time(void)
+{
+	struct	timeval time;
+	gettimeofday(&time, NULL);
+	return (time.tv_sec * 1000 + time.tv_usec / 1000);
+}
+
+int	ft_usleep(size_t ms)
+{
+	size_t	start;
+
+	start = get_time();
+	while((get_time() - start) < ms)
+		usleep(500);
+	return (0);
+}
