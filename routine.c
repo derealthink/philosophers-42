@@ -12,7 +12,7 @@ void    ph_sleep(t_philo *philo)
     ft_usleep(philo->time_sleep);
 }
 
-void    eat(t_philo *philo)
+void   eat(t_philo *philo)
 {
     pthread_mutex_lock(philo->r_fork);
     print_message("has taken a fork", philo->id, philo);
@@ -32,5 +32,31 @@ void    eat(t_philo *philo)
     ft_usleep(philo->time_eat);
     pthread_mutex_unlock(philo->r_fork);
     pthread_mutex_unlock(philo->l_fork);
+}
+
+void    *routine(void *arg)
+{
+    eat(arg);
+    think(arg);
+    ph_sleep(arg);
+
+}
+
+void    *monitor(void *arg)
+{
+    t_philo **philo;
+    int     i;
+    size_t  now;
+
+    philo = (t_philo **) *arg;
+    while (1)
+    {
+        i = 0;
+        while (i < philo[i]->nb_philo)
+        {
+            
+        }
+
+    }
 }
 

@@ -40,5 +40,6 @@ int is_dig_arr(char **s);
 int ft_atoi(char *s);
 int	ft_usleep(size_t ms);
 size_t	get_time(void);
+void	print_message(char *s, int id, t_philo *philo);
 
 #endif
