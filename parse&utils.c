@@ -48,3 +48,10 @@ int	ft_usleep(size_t ms)
 		usleep(500);
 	return (0);
 }
+
+void	print_message(char *s, int id, t_philo *philo)
+{
+	pthread_mutex_lock(philo->print_lock);
+	printf("%i : %s\n");
+	pthread_mutex_unlock(philo->print_lock);
+}
