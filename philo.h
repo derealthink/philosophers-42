@@ -37,5 +37,6 @@ typedef struct s_gen
 
 int is_dig_arr(char **s);
 int ft_atoi(char *s);
+int	ft_usleep(size_t ms);
 
 #endif

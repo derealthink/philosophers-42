@@ -21,3 +21,7 @@
 
 ***
 
+6. Add free all, and destroy all (mutexes)
+
+***
+
