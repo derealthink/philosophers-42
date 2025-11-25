@@ -1,0 +1,14 @@
+
+
+***
+1. Adding the hardcoded possibility that only one philosopher can also be a param.
+
+***
+
+2. Understand the whole usleep controversy why people implement it themselves.
+
+***
+
+3. Do routine 
+
+***
