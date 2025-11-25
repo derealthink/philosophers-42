@@ -74,6 +74,7 @@ t_philo    *init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
             tmp[i].nb_eat = -1;
         tmp[i].eaten = 0;
         tmp[i].dead = 0;
+        tmp[i].last_meal = get_time();
         tmp[i].print_lock = gen->print_lock;
         tmp[i].dead_lock = gen->dead_lock;
         tmp[i].meal_lock = gen->meal_lock;

@@ -18,6 +18,7 @@ typedef  struct s_philo
   int             nb_eat;
   int             eaten;
   int             dead;
+  int             last_meal;
   pthread_mutex_t *print_lock;
   pthread_mutex_t *dead_lock;
   pthread_mutex_t *meal_lock;
@@ -38,5 +39,6 @@ typedef struct s_gen
 int is_dig_arr(char **s);
 int ft_atoi(char *s);
 int	ft_usleep(size_t ms);
+size_t	get_time(void);
 
 #endif
