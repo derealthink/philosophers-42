@@ -42,21 +42,32 @@ void    *routine(void *arg)
 
 }
 
-void    *monitor(void *arg)
+void *monitor(void *arg)
 {
     t_philo **philo;
-    int     i;
-    size_t  now;
-
-    philo = (t_philo **) *arg;
+    int      i;
+    size_t   now;
+    philo = (t_philo **)arg;
     while (1)
     {
         i = 0;
-        while (i < philo[i]->nb_philo)
+        while (i < philo[0]->nb_philo)
         {
-            
+            pthread_mutex_lock(philo[i]->meal_lock);
+            now = get_time();
+            if ((int)(now - philo[i]->last_meal) >= philo[i]->time_die)
+            {
+                pthread_mutex_unlock(philo[i]->meal_lock);
+                pthread_mutex_lock(philo[i]->dead_lock);
+                philo[i]->dead = 1;
+                pthread_mutex_unlock(philo[i]->dead_lock);
+                print_message("died", philo[i]->id, philo[i]);
+                return NULL;
+            }
+            pthread_mutex_unlock(philo[i]->meal_lock);
+            i++;
         }
-
+        usleep(500);
     }
 }
 
