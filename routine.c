@@ -36,6 +36,9 @@ void   eat(t_philo *philo)
 
 void    *routine(void *arg)
 {
+    t_philo *philo;
+
+    philo = (t_philo *)arg;
     while(!is_dead(philo))
     {
         eat(arg);

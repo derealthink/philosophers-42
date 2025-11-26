@@ -42,5 +42,7 @@ int	    ft_usleep(size_t ms);
 size_t	get_time(void);
 void	  print_message(char *s, int id, t_philo *philo);
 int     is_dead(t_philo *philo);
+void    *monitor(void *arg);
+void    *routine(void *arg);
 
 #endif
