@@ -53,21 +53,47 @@ void *monitor(void *arg)
         i = 0;
         while (i < philo[0]->nb_philo)
         {
-            pthread_mutex_lock(philo[i]->meal_lock);
             now = get_time();
-            if ((int)(now - philo[i]->last_meal) >= philo[i]->time_die)
-            {
-                pthread_mutex_unlock(philo[i]->meal_lock);
-                pthread_mutex_lock(philo[i]->dead_lock);
-                philo[i]->dead = 1;
-                pthread_mutex_unlock(philo[i]->dead_lock);
-                print_message("died", philo[i]->id, philo[i]);
-                return NULL;
-            }
-            pthread_mutex_unlock(philo[i]->meal_lock);
+            if (monitor_dead(philo[i], now))
+                return (NULL);
+            if (monitor_eaten(philo[i]))
+                return (NULL);
             i++;
         }
         usleep(500);
     }
+}
+
+int monitor_dead(t_philo *philo, size_t now)
+{
+    pthread_mutex_lock(philo->meal_lock);
+    if ((int)(now - philo->last_meal) >= philo->time_die)
+    {
+        pthread_mutex_unlock(philo->meal_lock);
+        pthread_mutex_lock(philo->dead_lock);
+        philo->dead = 1;
+        pthread_mutex_unlock(philo->dead_lock);
+        print_message("died", philo->id, philo);
+        return (1);
+    }
+    pthread_mutex_unlock(philo->meal_lock);
+    return (0);
+}
+
+int monitor_eaten(t_philo *philo)
+{
+    if (philo->nb_eat == -1)
+        return (0);
+    pthread_mutex_lock(philo->meal_lock);
+    if (philo->eaten >= philo->nb_eat)
+    {
+        pthread_mutex_unlock(philo->meal_lock);
+        pthread_mutex_lock(philo->dead_lock);
+        philo->dead = 1;
+        pthread_mutex_unlock(philo->dead_lock);
+        return (1);
+    }
+    pthread_mutex_unlock(philo->meal_lock);
+    return (0);
 }
 
