@@ -1,40 +1,6 @@
 
 #include "philo.h"
 
-void    init(char **argv)
-{
-    int nb;
-    t_philo *philo;
-    t_gen   *gen;
-
-    if (!is_dig_arr(argv))
-    {
-        printf("parse error\n");
-        return ;
-    }
-    nb = ft_atoi(argv[1]);
-    if (nb <= 0)
-    {
-        printf("insufficient n  of philosophers\n");
-        return ;
-    }
-    gen = malloc(sizeof(t_gen));
-    philo = malloc(sizeof(t_philo) * nb);
-    init_gen(gen, philo, argv, nb);
-}
-void    init_gen(t_gen *gen, t_philo *philo, char **argv, int nb)
-{
-    gen->dead_lock = malloc(sizeof(pthread_mutex_t));
-    gen->meal_lock = malloc(sizeof(pthread_mutex_t));
-    gen->print_lock = malloc(sizeof(pthread_mutex_t));
-    pthread_mutex_init(gen->dead_lock, NULL);
-    pthread_mutex_init(gen->meal_lock, NULL);
-    pthread_mutex_init(gen->print_lock, NULL);
-    gen->dead_flag = 0;
-    init_loop_philo(philo, gen, argv, nb);
-    gen->philo = philo;
-}
-
 void    init_forks(t_philo *tmp, t_gen *gen, int nb)
 {
     int i;
@@ -83,4 +49,17 @@ t_philo    *init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
     }
     init_forks(tmp, gen ,nb);
     return (tmp);
+}
+
+void    init_gen(t_gen *gen, t_philo *philo, char **argv, int nb)
+{
+    gen->dead_lock = malloc(sizeof(pthread_mutex_t));
+    gen->meal_lock = malloc(sizeof(pthread_mutex_t));
+    gen->print_lock = malloc(sizeof(pthread_mutex_t));
+    pthread_mutex_init(gen->dead_lock, NULL);
+    pthread_mutex_init(gen->meal_lock, NULL);
+    pthread_mutex_init(gen->print_lock, NULL);
+    gen->dead_flag = 0;
+    init_loop_philo(philo, gen, argv, nb);
+    gen->philo = philo;
 }

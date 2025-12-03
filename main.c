@@ -12,18 +12,18 @@ int main(int  argc, char **argv)
     if (!is_dig_arr(argv))
     {
         printf("parse error\n");
-        return ;
+        return (1);
     }
     nb = ft_atoi(argv[1]);
     if (nb <= 0)
     {
         printf("insufficient n  of philosophers\n");
-        return ;
+        return (1);
     }
     gen = malloc(sizeof(t_gen));
     philo = malloc(sizeof(t_philo) * nb);
     init_gen(gen, philo, argv, nb);
-	create_threads(&philo, nb);
+	create_threads(philo, nb);
 	clean_exit(gen, nb);
 	return (0);
 

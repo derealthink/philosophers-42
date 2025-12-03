@@ -45,29 +45,7 @@ void    *routine(void *arg)
         think(arg);
         ph_sleep(arg);
     }
-
-}
-
-void *monitor(void *arg)
-{
-    t_philo **philo;
-    int      i;
-    size_t   now;
-    philo = (t_philo **)arg;
-    while (1)
-    {
-        i = 0;
-        while (i < philo[0]->nb_philo)
-        {
-            now = get_time();
-            if (monitor_dead(philo[i], now))
-                return (NULL);
-            if (monitor_eaten(philo[i]))
-                return (NULL);
-            i++;
-        }
-        usleep(500);
-    }
+    return (NULL);
 }
 
 int monitor_dead(t_philo *philo, size_t now)
@@ -101,5 +79,29 @@ int monitor_eaten(t_philo *philo)
     }
     pthread_mutex_unlock(philo->meal_lock);
     return (0);
+}
+
+void *monitor(void *arg)
+{
+    t_philo *philo;
+    int      i;
+    size_t   now;
+ 
+    philo = (t_philo *)arg;
+    now = get_time();
+    while (1)
+    {
+        i = 0;
+        while (i < philo[0].nb_philo)
+        {
+            now = get_time();
+            if (monitor_dead(&philo[i], now))
+                return (NULL);
+            if (monitor_eaten(&philo[i]))
+                return (NULL);
+            i++;
+        }
+        usleep(500);
+    }
 }
 

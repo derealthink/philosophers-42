@@ -12,7 +12,7 @@ int is_dead(t_philo *philo)
     return (0);
 }
 
-int create_threads(t_philo **philos, int count)
+int create_threads(t_philo *philos, int count)
 {
     pthread_t       monitor_thread;
     pthread_t      *threads;
@@ -28,7 +28,7 @@ int create_threads(t_philo **philos, int count)
     i = 0;
     while (i < count)
     {
-        if (pthread_create(&threads[i], NULL, routine, (void *)philos[i]) != 0)
+        if (pthread_create(&threads[i], NULL, routine, (void *)&philos[i]) != 0)
         {
             while (--i >= 0)
                 pthread_join(threads[i], NULL);
