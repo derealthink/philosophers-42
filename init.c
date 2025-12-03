@@ -41,8 +41,8 @@ void    init_forks(t_philo *tmp, t_gen *gen, int nb)
     pthread_mutex_t *forks;
 
     i = 0;
-    forks = gen->forks;
     gen->forks = malloc(sizeof(pthread_mutex_t) * nb);
+    forks = gen->forks;
     while (i < nb)
     {
         pthread_mutex_init(&forks[i], NULL);
