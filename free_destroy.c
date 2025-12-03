@@ -1,3 +1,5 @@
+#include "philo.h"
+
 void destroy_mutexes(t_gen *gen, int nb)
 {
     int i;

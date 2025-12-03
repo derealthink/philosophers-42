@@ -45,5 +45,7 @@ int     is_dead(t_philo *philo);
 void    *monitor(void *arg);
 void    *routine(void *arg);
 int     create_threads(t_philo **philos, int count);
+void    clean_exit(t_gen *gen, int nb);
+void    init_gen(t_gen *gen, t_philo *philo, char **argv, int nb);
 
 #endif
