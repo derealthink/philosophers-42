@@ -27,6 +27,7 @@ void   eat(t_philo *philo)
     pthread_mutex_lock(philo->meal_lock);
     print_message("is eating", philo->id, philo);
     philo->eaten++;//is eating bool may be needed here
+    print_debug(philo->id, philo);
     philo->last_meal = get_time();
     pthread_mutex_unlock(philo->meal_lock);
     ft_usleep(philo->time_eat);
@@ -39,6 +40,8 @@ void    *routine(void *arg)
     t_philo *philo;
 
     philo = (t_philo *)arg;
+    if (philo->id % 2 == 0)
+        ft_usleep(1);
     while(!is_dead(philo))
     {
         eat(arg);
@@ -54,10 +57,10 @@ int monitor_dead(t_philo *philo, size_t now)
     if ((int)(now - philo->last_meal) >= philo->time_die)
     {
         pthread_mutex_unlock(philo->meal_lock);
+        print_message("died", philo->id, philo);
         pthread_mutex_lock(philo->dead_lock);
         philo->dead = 1;
         pthread_mutex_unlock(philo->dead_lock);
-        print_message("died", philo->id, philo);
         return (1);
     }
     pthread_mutex_unlock(philo->meal_lock);
@@ -66,8 +69,10 @@ int monitor_dead(t_philo *philo, size_t now)
 
 int monitor_eaten(t_philo *philo)
 {
+    pthread_mutex_lock(philo->meal_lock);
     if (philo->nb_eat == -1)
         return (0);
+    pthread_mutex_unlock(philo->meal_lock);
     pthread_mutex_lock(philo->meal_lock);
     if (philo->eaten >= philo->nb_eat)
     {
@@ -96,12 +101,13 @@ void *monitor(void *arg)
         {
             now = get_time();
             if (monitor_dead(&philo[i], now))
-                return (NULL);
+                break ;
             if (monitor_eaten(&philo[i]))
-                return (NULL);
+                break ;
             i++;
         }
-        usleep(500);
+        ft_usleep(500);
     }
+    return (NULL);
 }
 

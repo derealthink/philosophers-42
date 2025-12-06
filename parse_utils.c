@@ -61,3 +61,11 @@ void	print_message(char *s, int id, t_philo *philo)
 	printf("%zu %i : %s\n", get_time(), id, s);
 	pthread_mutex_unlock(philo->print_lock);
 }
+
+void	print_debug(int id, t_philo *philo)
+{
+	pthread_mutex_lock(philo->print_lock);
+	printf("\n%zu %i has eaten %i\n",get_time(), id, philo->eaten);
+	pthread_mutex_unlock(philo->print_lock);
+} 
+

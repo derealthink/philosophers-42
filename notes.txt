@@ -1,27 +1,103 @@
 
 
-***
-1. Adding the hardcoded possibility that only one philosopher can also be a param.
+Perfect! Now I understand the requirements. Let's fix this step by step.
+Core Problems Identified:
 
-***
+The monitor breaks but philosopher threads don't know to stop - they keep looping because is_dead() only checks their own philo->dead, but you're only setting ONE philosopher's dead flag
+The monitor_eaten has redundant locks - that double lock is unnecessary
+No global stop signal - you have gen->dead_flag but you're never using it!
 
-2. Understand the whole usleep controversy why people implement it themselves. DONE
+The Fix Strategy:
+We need to use gen->dead_flag as a global stop signal that ALL threads check. When ANY philosopher dies OR finishes eating, we set this global flag, and all threads see it and stop.
+Here's what we need to change:
+1. First, let's fix the is_dead() function to check the GLOBAL flag:
+Since philosophers don't have access to gen, we need to add it. Change the t_philo struct to include a pointer to the global dead flag:
+c// In philo.h, add to t_philo struct:
+typedef struct s_philo
+{
+    int             id;
+    int             nb_philo;
+    int             time_die;
+    int             time_eat;
+    int             time_sleep;
+    int             nb_eat;
+    int             eaten;
+    int             dead;
+    int             last_meal;
+    pthread_mutex_t *print_lock;
+    pthread_mutex_t *dead_lock;
+    pthread_mutex_t *meal_lock;
+    pthread_mutex_t *r_fork;
+    pthread_mutex_t *l_fork;
+    int             *dead_flag;  // ADD THIS - pointer to global flag
+} t_philo;
+2. Update init_loop_philo to assign the global flag:
+// In init.c, add this line in the while loop:
+tmp[i].dead_flag = &gen->dead_flag;
 
-***
+3. Fix is_dead() to check the global flag:
+int is_dead(t_philo *philo)
+{
+    pthread_mutex_lock(philo->dead_lock);
+    if (*philo->dead_flag == 1)  // Check GLOBAL flag, not individual philo->dead
+    {
+        pthread_mutex_unlock(philo->dead_lock);
+        return (1);
+    }
+    pthread_mutex_unlock(philo->dead_lock);
+    return (0);
+}
 
-3. Do routine 
+4. Fix the monitor to set the GLOBAL flag:
+c// In routine.c - update monitor_dead:
+int monitor_dead(t_philo *philo, size_t now)
+{
+    pthread_mutex_lock(philo->meal_lock);
+    if ((int)(now - philo->last_meal) >= philo->time_die)
+    {
+        pthread_mutex_unlock(philo->meal_lock);
+        pthread_mutex_lock(philo->dead_lock);
+        *philo->dead_flag = 1;  // Set GLOBAL flag
+        pthread_mutex_unlock(philo->dead_lock);
+        print_message("died", philo->id, philo);
+        return (1);
+    }
+    pthread_mutex_unlock(philo->meal_lock);
+    return (0);
+}
 
-***
+// And fix monitor_eaten (remove the redundant lock and set global flag):
+int monitor_eaten(t_philo *philo)
+{
+    if (philo->nb_eat == -1)
+        return (0);
+    
+    pthread_mutex_lock(philo->meal_lock);
+    if (philo->eaten >= philo->nb_eat)
+    {
+        pthread_mutex_unlock(philo->meal_lock);
+        pthread_mutex_lock(philo->dead_lock);
+        *philo->dead_flag = 1;  // Set GLOBAL flag
+        pthread_mutex_unlock(philo->dead_lock);
+        return (1);
+    }
+    pthread_mutex_unlock(philo->meal_lock);
+    return (0);
+}
 
-4. Change milliseconds to size_t and change atoi to atol
+5. Fix print_message to also check global flag:
 
-***
-
-5. Add NULL checks in all the mallocs and check that they are indeed an array
-
-***
-
-6. Add free all, and destroy all (mutexes) DONE
-
-***
+void    print_message(char *s, int id, t_philo *philo)
+{
+    pthread_mutex_lock(philo->dead_lock);
+    if (*philo->dead_flag == 1)  // Check global flag
+    {
+        pthread_mutex_unlock(philo->dead_lock);
+        return ;
+    }
+    pthread_mutex_unlock(philo->dead_lock);
+    pthread_mutex_lock(philo->print_lock);
+    printf("%zu %i : %s\n", get_time(), id, s);
+    pthread_mutex_unlock(philo->print_lock);
+}
 
