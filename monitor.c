@@ -39,22 +39,32 @@ void *monitor(void *arg)
     t_philo *philo;
     int      i;
     size_t   now;
- 
+    int      stop;
+    
     philo = (t_philo *)arg;
     now = get_time();
-    while (1)
+    stop = 0;    
+    while (!stop)
     {
         i = 0;
         while (i < philo[0].nb_philo)
         {
             now = get_time();
             if (monitor_dead(&philo[i], now))
-                break ;
+            {
+                stop = 1;  // Signal to exit outer loop
+                break;
+            }
             if (monitor_eaten(&philo[i]))
-                break ;
+            {
+                stop = 1;  // Signal to exit outer loop
+                break;
+            }
             i++;
         }
-        ft_usleep(500, philo);
+        if (!stop)
+            usleep(500);  // Only sleep if not stopping
     }
     return (NULL);
 }
+
