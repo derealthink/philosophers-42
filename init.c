@@ -25,8 +25,10 @@ void    init_forks(t_philo *tmp, t_gen *gen, int nb)
 
 t_philo    *init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
 {
-    int i;
+    int     i;
+    size_t  start;
 
+    start = get_time();
     i = 0;
     while (i < nb)
     {
@@ -46,6 +48,7 @@ t_philo    *init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
         tmp[i].dead_lock = gen->dead_lock;
         tmp[i].meal_lock = gen->meal_lock;
         tmp[i].dead_flag = &gen->dead_flag;
+        tmp[i].start_time = start;
         i++;
     }
     init_forks(tmp, gen ,nb);

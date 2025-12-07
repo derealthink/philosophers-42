@@ -24,7 +24,8 @@ typedef  struct s_philo
   pthread_mutex_t *meal_lock;
   pthread_mutex_t *r_fork;
   pthread_mutex_t *l_fork;
-  int              *dead_flag;
+  int             *dead_flag;
+  size_t          start_time;
 } t_philo;
 
 typedef struct s_gen 

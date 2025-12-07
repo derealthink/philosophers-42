@@ -45,11 +45,7 @@ void    *routine(void *arg)
     while(!is_dead(philo))
     {
         eat(arg);
-        if (is_dead(philo))
-            break;
         think(arg);
-        if (is_dead(philo))
-            break;
         ph_sleep(arg);
     }
     return (NULL);

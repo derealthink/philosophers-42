@@ -54,6 +54,8 @@ int	ft_usleep(size_t ms, t_philo *philo)
 
 void	print_message(char *s, int id, t_philo *philo)
 {
+	size_t	passed;
+
 	pthread_mutex_lock(philo->dead_lock);
 	if (*philo->dead_flag == 1)
 	{
@@ -61,8 +63,9 @@ void	print_message(char *s, int id, t_philo *philo)
 		return ;
 	}
 	pthread_mutex_unlock(philo->dead_lock);
+	passed = get_time() - philo->start_time;
 	pthread_mutex_lock(philo->print_lock);
-	printf("%zu %i : %s\n", get_time(), id, s);
+	printf("%zu %i : %s\n", passed, id, s);
 	pthread_mutex_unlock(philo->print_lock);
 }
 
