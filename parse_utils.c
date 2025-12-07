@@ -38,20 +38,24 @@ size_t	get_time(void)
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
 
-int	ft_usleep(size_t ms)
+int	ft_usleep(size_t ms, t_philo *philo)
 {
 	size_t	start;
 
 	start = get_time();
 	while((get_time() - start) < ms)
+	{
+		if (is_dead(philo))
+			return (1);
 		usleep(500);
+	}
 	return (0);
 }
 
 void	print_message(char *s, int id, t_philo *philo)
 {
 	pthread_mutex_lock(philo->dead_lock);
-	if (philo->dead == 1)
+	if (*philo->dead_flag == 1)
 	{
 		pthread_mutex_unlock(philo->dead_lock);
 		return ;

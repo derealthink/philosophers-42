@@ -10,7 +10,8 @@ SRCS        = main.c \
               parse_utils.c \
               atoi.c \
               routine.c \
-			  free_destroy.c
+			  free_destroy.c \
+			  monitor.c
 
 OBJS        = $(SRCS:.c=.o)
 

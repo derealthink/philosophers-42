@@ -24,6 +24,7 @@ typedef  struct s_philo
   pthread_mutex_t *meal_lock;
   pthread_mutex_t *r_fork;
   pthread_mutex_t *l_fork;
+  int              *dead_flag;
 } t_philo;
 
 typedef struct s_gen 
@@ -38,7 +39,7 @@ typedef struct s_gen
 
 int     is_dig_arr(char **s);
 int     ft_atoi(char *s);
-int	    ft_usleep(size_t ms);
+int	    ft_usleep(size_t ms, t_philo *philo);
 size_t	get_time(void);
 void	  print_message(char *s, int id, t_philo *philo);
 int     is_dead(t_philo *philo);
