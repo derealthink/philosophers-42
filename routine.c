@@ -27,7 +27,6 @@ void   eat(t_philo *philo)
     pthread_mutex_lock(philo->meal_lock);
     print_message("is eating", philo->id, philo);
     philo->eaten++;
-    print_debug(philo->id, philo);
     philo->last_meal = get_time();
     pthread_mutex_unlock(philo->meal_lock);
     ft_usleep(philo->time_eat, philo);
@@ -41,7 +40,7 @@ void    *routine(void *arg)
 
     philo = (t_philo *)arg;
     if (philo->id % 2 == 0)
-        ft_usleep(1, philo);
+        ft_usleep(philo->time_eat / 2, philo);
     while(!is_dead(philo))
     {
         eat(arg);
