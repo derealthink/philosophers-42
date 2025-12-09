@@ -1,30 +1,40 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: uponci <uponci@student.42berlin.de>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 16:31:06 by uponci            #+#    #+#             */
+/*   Updated: 2025/12/09 16:31:08 by uponci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-# include "philo.h"
+#include "philo.h"
 
-int main(int  argc, char **argv)
+int	main(int argc, char **argv)
 {
 	int		nb;
 	t_gen	*gen;
-	t_philo *philo;
+	t_philo	*philo;
 
 	if (argc < 5 || argc > 6)
 		return (1);
-    if (!is_dig_arr(argv))
-    {
-        printf("parse error\n");
-        return (1);
-    }
-    nb = ft_atoi(argv[1]);
-    if (nb <= 0)
-    {
-        printf("insufficient n  of philosophers\n");
-        return (1);
-    }
-    gen = malloc(sizeof(t_gen));
-    philo = malloc(sizeof(t_philo) * nb);
-    init_gen(gen, philo, argv, nb);
+	if (!is_dig_arr(argv))
+	{
+		printf("parse error\n");
+		return (1);
+	}
+	nb = ft_atoi(argv[1]);
+	if (nb <= 0)
+	{
+		printf("insufficient n  of philosophers\n");
+		return (1);
+	}
+	gen = malloc(sizeof(t_gen));
+	philo = malloc(sizeof(t_philo) * nb);
+	init_gen(gen, philo, argv, nb);
 	create_threads(philo, nb);
 	clean_exit(gen, nb);
 	return (0);
-
 }

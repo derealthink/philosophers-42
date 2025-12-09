@@ -1,13 +1,24 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_utils.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: uponci <uponci@student.42berlin.de>        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/12/09 17:57:22 by uponci            #+#    #+#             */
+/*   Updated: 2025/12/09 17:57:24 by uponci           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-#include  "philo.h"
+#include "philo.h"
 
-int is_digit(char *s)
+int	is_digit(char *s)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	len = 0;
-	while(s[len])
+	while (s[len])
 		len++;
 	i = 0;
 	while (s[i] >= '0' && s[i] <= '9')
@@ -17,9 +28,9 @@ int is_digit(char *s)
 	return (0);
 }
 
-int is_dig_arr(char **s)
+int	is_dig_arr(char **s)
 {
-	int i;
+	int	i;
 
 	i = 1;
 	while (s[i])
@@ -33,7 +44,8 @@ int is_dig_arr(char **s)
 
 size_t	get_time(void)
 {
-	struct	timeval time;
+	struct timeval	time;
+
 	gettimeofday(&time, NULL);
 	return (time.tv_sec * 1000 + time.tv_usec / 1000);
 }
@@ -43,7 +55,7 @@ int	ft_usleep(size_t ms, t_philo *philo)
 	size_t	start;
 
 	start = get_time();
-	while((get_time() - start) < ms)
+	while ((get_time() - start) < ms)
 	{
 		if (is_dead(philo))
 			return (1);
@@ -68,4 +80,3 @@ void	print_message(char *s, int id, t_philo *philo)
 	printf("%zu %i : %s\n", passed, id, s);
 	pthread_mutex_unlock(philo->print_lock);
 }
-
