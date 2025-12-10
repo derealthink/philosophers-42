@@ -30,51 +30,46 @@ int	monitor_dead(t_philo *philo, size_t now)
 
 int	monitor_eaten(t_philo *philo)
 {
-	if (philo->nb_eat == -1)
-		return (0);
-	pthread_mutex_lock(philo->meal_lock);
-	if (philo->eaten >= philo->nb_eat)
+	int	i;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (i < philo[0].nb_philo)
 	{
-		pthread_mutex_unlock(philo->meal_lock);
-		pthread_mutex_lock(philo->dead_lock);
-		*philo->dead_flag = 1;
-		pthread_mutex_unlock(philo->dead_lock);
-		return (1);
+		pthread_mutex_lock(philo[i].meal_lock);
+		if (philo[i].eaten >= philo[i].nb_eat)
+			count++;
+		pthread_mutex_unlock(philo[i].meal_lock);
+		i++;
 	}
-	pthread_mutex_unlock(philo->meal_lock);
-	return (0);
+	return (count == philo[0].nb_philo);
 }
 
 void	*monitor(void *arg)
 {
 	t_philo	*philo;
 	int		i;
-	size_t	now;
-	int		stop;
 
 	philo = (t_philo *)arg;
-	now = get_time();
-	stop = 0;
-	while (!stop)
+	while (1)
 	{
 		i = 0;
 		while (i < philo[0].nb_philo)
 		{
-			now = get_time();
-			if (monitor_dead(&philo[i], now))
+			if (monitor_dead(&philo[i], get_time()))
 			{
-				stop = 1;
-				break ;
-			}
-			if (monitor_eaten(&philo[i]))
-			{
-				stop = 1;
-				break ;
+				return (NULL);
 			}
 			i++;
 		}
-		if (!stop)
-			usleep(500);
+		if (monitor_eaten(philo))
+		{
+			pthread_mutex_lock(philo->dead_lock);
+			*philo->dead_flag = 1;
+			pthread_mutex_unlock(philo->dead_lock);
+			return (NULL);
+		}
+		usleep(500);
 	}
-	return (NULL);
 }

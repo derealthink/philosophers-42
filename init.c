@@ -63,7 +63,7 @@ t_philo	*init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
 	while (i < nb)
 	{
 		tmp[i].nb_philo = nb;
-		init_helper(&tmp[i], gen, argv, i);
+		init_helper(&tmp[i], gen, argv, i + 1);
 		tmp[i].start_time = start;
 		i++;
 	}

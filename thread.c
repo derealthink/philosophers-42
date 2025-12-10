@@ -24,7 +24,7 @@ int	is_dead(t_philo *philo)
 	return (0);
 }
 
-int	create_threads(t_philo *philos, int count)
+/*int	create_threads(t_philo *philos, int count)
 {
 	pthread_t	monitor_thread;
 	pthread_t	*threads;
@@ -58,6 +58,61 @@ int	create_threads(t_philo *philos, int count)
 		pthread_join(threads[i], NULL);
 		i++;
 	}
+	free(threads);
+	return (0);
+}*/
+
+int	create_philo_threads(t_philo *philos, pthread_t *threads, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		if (pthread_create(&threads[i], NULL, routine, (void *)&philos[i]) != 0)
+		{
+			while (--i >= 0)
+				pthread_join(threads[i], NULL);
+			return (1);
+		}
+		i++;
+	}
+	return (0);
+}
+
+void	join_philo_threads(pthread_t *threads, int count)
+{
+	int	i;
+
+	i = 0;
+	while (i < count)
+	{
+		pthread_join(threads[i], NULL);
+		i++;
+	}
+}
+
+int	create_threads(t_philo *philos, int count)
+{
+	pthread_t	monitor_thread;
+	pthread_t	*threads;
+
+	threads = malloc(sizeof(pthread_t) * count);
+	if (!threads)
+		return (1);
+	if (pthread_create(&monitor_thread, NULL, monitor, (void *)philos) != 0)
+	{
+		free(threads);
+		return (1);
+	}
+	if (create_philo_threads(philos, threads, count))
+	{
+		pthread_join(monitor_thread, NULL);
+		free(threads);
+		return (1);
+	}
+	pthread_join(monitor_thread, NULL);
+	join_philo_threads(threads, count);
 	free(threads);
 	return (0);
 }
