@@ -34,24 +34,6 @@ void	init_forks(t_philo *tmp, t_gen *gen, int nb)
 	}
 }
 
-t_philo	*init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
-{
-	int		i;
-	size_t	start;
-
-	start = get_time();
-	i = 0;
-	while (i < nb)
-	{
-		tmp[i].nb_philo = nb;
-		init_helper(&tmp[i], gen, argv, i);
-		tmp[i].start_time = start;
-		i++;
-	}
-	init_forks(tmp, gen, nb);
-	return (tmp);
-}
-
 void	init_helper(t_philo *p, t_gen *gen, char **argv, int id)
 {
 	p->id = id;
@@ -69,6 +51,24 @@ void	init_helper(t_philo *p, t_gen *gen, char **argv, int id)
 	p->dead_lock = gen->dead_lock;
 	p->meal_lock = gen->meal_lock;
 	p->dead_flag = &gen->dead_flag;
+}
+
+t_philo	*init_loop_philo(t_philo *tmp, t_gen *gen, char **argv, int nb)
+{
+	int		i;
+	size_t	start;
+
+	start = get_time();
+	i = 0;
+	while (i < nb)
+	{
+		tmp[i].nb_philo = nb;
+		init_helper(&tmp[i], gen, argv, i);
+		tmp[i].start_time = start;
+		i++;
+	}
+	init_forks(tmp, gen, nb);
+	return (tmp);
 }
 
 void	init_gen(t_gen *gen, t_philo *philo, char **argv, int nb)
