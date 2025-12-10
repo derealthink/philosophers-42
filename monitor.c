@@ -45,6 +45,19 @@ int	monitor_eaten(t_philo *philo)
 	}
 	return (count == philo[0].nb_philo);
 }
+/*if (philo->nb_eat == -1)
+		return (0);
+	pthread_mutex_lock(philo->meal_lock);
+	if (philo->eaten >= philo->nb_eat)
+	{
+		pthread_mutex_unlock(philo->meal_lock);
+		pthread_mutex_lock(philo->dead_lock);
+		*philo->dead_flag = 1;
+		pthread_mutex_unlock(philo->dead_lock);
+		return (1);
+	}
+	pthread_mutex_unlock(philo->meal_lock);
+	return (0);*/
 
 void	*monitor(void *arg)
 {
