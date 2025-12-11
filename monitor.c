@@ -35,6 +35,8 @@ int	monitor_eaten(t_philo *philo)
 
 	i = 0;
 	count = 0;
+	if (philo->nb_eat == -1)
+		return (0);
 	while (i < philo[0].nb_philo)
 	{
 		pthread_mutex_lock(philo[i].meal_lock);
